@@ -23,8 +23,9 @@ def main():
     # Sample query (replace with your table and dataset)
     query = """
     SELECT *
-    FROM `bizbuddydemo-v1.facebook_data.hv_postdata`
+    FROM `bizbuddydemo-v1.facebook_data.lundys_postdata`
     LIMIT 10
+    ORDER BY created_time DESC
     """
     
     # Fetch the data

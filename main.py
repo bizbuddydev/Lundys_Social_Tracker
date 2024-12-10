@@ -24,8 +24,8 @@ def main():
     query = """
     SELECT *
     FROM `bizbuddydemo-v1.facebook_data.lundys_postdata`
-    LIMIT 10
     ORDER BY created_time DESC
+    LIMIT 10
     """
     
     # Fetch the data

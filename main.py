@@ -3,6 +3,8 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 import pandas as pd
 
+st.set_page_config(page_title="Social Overview", layout="wide")
+
 # Load credentials and project ID from st.secrets
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]

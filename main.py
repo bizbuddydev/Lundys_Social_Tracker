@@ -5,9 +5,9 @@ import pandas as pd
 
 # Load credentials and project ID from st.secrets
 credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["bigquery"]
+    st.secrets["gcp_service_account"]
 )
-project_id = st.secrets["bigquery"]["project_id"]
+project_id = st.secrets["gcp_service_account"]["project_id"]
 
 # Function to fetch data from BigQuery
 def fetch_data(query: str) -> pd.DataFrame:
@@ -23,7 +23,7 @@ def main():
     # Sample query (replace with your table and dataset)
     query = """
     SELECT *
-    FROM `your-project-id.your-dataset.your-table`
+    FROM `bizbuddydemo-v1.facebook_data.hv_postdata`
     LIMIT 10
     """
     

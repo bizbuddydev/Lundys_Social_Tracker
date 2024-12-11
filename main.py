@@ -22,7 +22,6 @@ def fetch_data(query: str) -> pd.DataFrame:
 def main():
     st.title("Streamlit GCP Data Loader")
     
-    # Sample query (replace with your table and dataset)
     query = """
     SELECT *
     FROM `bizbuddydemo-v1.ig_data.lundys_postdata`
@@ -33,10 +32,50 @@ def main():
     # Fetch the data
     st.write("Fetching data from BigQuery...")
     data = fetch_data(query)
+
+    # Get top 10 posts
+    top_posts = data.sort_values(by='reach', ascending=False).head(10)
     
-    # Display the DataFrame
-    st.write("Data fetched from BigQuery:")
-    st.dataframe(data)
+    # Iterate through the top posts and display them
+    for index, row in top_posts.iterrows():
+        # Create two columns
+        col1, col2 = st.columns([2, 1])  # Adjust width as needed
+        
+        with col1:
+            # Display caption
+            st.markdown(f"### {row['caption']}")
+            
+            # Display metrics in scorecards
+            st.markdown("""
+            <style>
+            .scorecard {
+                display: inline-block;
+                padding: 10px 20px;
+                margin: 5px;
+                background-color: #f3f3f3;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: bold;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+            
+            metrics_html = f"""
+            <div class="scorecard">Likes: {row['like_count']}</div>
+            <div class="scorecard">Comments: {row['comments_count']}</div>
+            <div class="scorecard">Reach: {row['reach']}</div>
+            <div class="scorecard">Saves: {row['saved']}</div>
+            """
+            st.markdown(metrics_html, unsafe_allow_html=True)
+        
+        with col2:
+            # Display media
+            if row['media_type'] == 'IMAGE':
+                st.image(row['source'], use_column_width=True)
+            elif row['media_type'] == 'VIDEO':
+                st.video(row['source'])
+    
+        st.markdown("---")
 
 if __name__ == "__main__":
     main()

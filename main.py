@@ -82,7 +82,7 @@ def main():
         
         with col1:
             # Display timestamp
-            st.markdown(f"<div class='details'>Posted on: {row['created_date']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='details'>Posted on: {row['created_time']}</div>", unsafe_allow_html=True)
     
             # Display caption with title
             st.markdown(f"<div class='caption'>Caption: {row['caption']}</div>", unsafe_allow_html=True)

@@ -18,6 +18,34 @@ def fetch_data(query: str) -> pd.DataFrame:
     result = query_job.result()  # Wait for the query to finish
     return result.to_dataframe()
 
+# Define filter functions
+def filter_last_30_days(df):
+    cutoff = datetime.now() - timedelta(days=30)
+    return df[df["timestamp"] >= cutoff].sort_values(by="timestamp", ascending=False)
+
+def filter_last_6_months(df):
+    cutoff = datetime.now() - timedelta(days=182)  # Approx. 6 months
+    return df[df["timestamp"] >= cutoff].sort_values(by="timestamp", ascending=False)
+
+def top_10_by_column(df, column):
+    return df.sort_values(by=column, ascending=False).head(10)
+
+
+### Get data ###
+query = """
+SELECT *
+FROM `bizbuddydemo-v1.ig_data.lundys_postdata`
+ORDER BY created_time DESC
+LIMIT 10
+"""
+
+# Fetch the 
+data = fetch_data(query)
+
+# Add Like Rate
+data["Like Rate"] = round(data["like_count"]/data["reach"] * 100, 2)
+
+
 # Main app
 def main():
     # Add custom CSS for centering text
@@ -42,22 +70,40 @@ def main():
     
     # Centered header
     st.markdown('<div class="centered-header">Lundy\'s Ice Cream</div>', unsafe_allow_html=True)
-    
-    query = """
-    SELECT *
-    FROM `bizbuddydemo-v1.ig_data.lundys_postdata`
-    ORDER BY created_time DESC
-    LIMIT 10
-    """
-    
-    # Fetch the data
-    data = fetch_data(query)
 
-    # Add Like Rate
-    data["Like Rate"] = round(data["like_count"]/data["reach"] * 100, 2)
-
-    # Get top 10 posts
-    top_posts = data.sort_values(by='reach', ascending=False).head(10)
+    # Add buttons for filtering options
+    st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    
+    with col1:
+        if st.button("Last 30 Days"):
+            filtered_data = filter_last_30_days(data)
+    
+    with col2:
+        if st.button("Last 6 Months"):
+            filtered_data = filter_last_6_months(data)
+    
+    with col3:
+        if st.button("Top 10 by Reach"):
+            filtered_data = top_10_by_column(data, "reach")
+    
+    with col4:
+        if st.button("Top 10 by Likes"):
+            filtered_data = top_10_by_column(data, "like_count")
+    
+    with col5:
+        if st.button("Top 10 by Like Rate"):
+            filtered_data = top_10_by_column(data, "Like Rate")
+    
+    with col6:
+        if st.button("Top 10 by Comments"):
+            filtered_data = top_10_by_column(data, "comments_count")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # If no filter is selected, display all data sorted by date
+    if "filtered_data" not in locals():
+        filtered_data = data.sort_values(by="timestamp", ascending=False).head(25)
     
     st.markdown("""
     <style>
@@ -102,7 +148,7 @@ def main():
     st.markdown("---") 
     
     # Iterate through the top posts and display them
-    for index, row in top_posts.iterrows():
+    for index, row in filtered_data.iterrows():
         # Create three columns for spacing and content
         spacer1, col1, col2, spacer2 = st.columns([0.5, 2, 1, 0.5])  # Adjust widths as needed
         

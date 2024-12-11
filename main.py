@@ -71,7 +71,7 @@ def main():
 
     # Add buttons for filtering options
     st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 1, 1, 1, 1])
     
     with col1:
         if st.button("Last 30 Days"):

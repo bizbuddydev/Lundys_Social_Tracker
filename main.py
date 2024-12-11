@@ -53,7 +53,7 @@ def main():
     """, unsafe_allow_html=True)
     
     # Define a consistent media width
-    MEDIA_WIDTH = 300  # Adjust this value as needed
+    MEDIA_WIDTH = 500  # Adjust this value as needed
     
     # Iterate through the top posts and display them
     for index, row in top_posts.iterrows():

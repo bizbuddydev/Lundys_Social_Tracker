@@ -73,7 +73,7 @@ def main():
     """, unsafe_allow_html=True)
     
     # Define a consistent media width
-    MEDIA_WIDTH = 300
+    MEDIA_WIDTH = 500
     
     # Iterate through the top posts and display them
     for index, row in top_posts.iterrows():
@@ -82,7 +82,7 @@ def main():
         
         with col1:
             # Display timestamp
-            st.markdown(f"<div class='details'>Posted on: {row['timestamp']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='details'>Posted on: {row['created_date']}</div>", unsafe_allow_html=True)
     
             # Display caption with title
             st.markdown(f"<div class='caption'>Caption: {row['caption']}</div>", unsafe_allow_html=True)

@@ -36,10 +36,27 @@ def main():
     # Get top 10 posts
     top_posts = data.sort_values(by='reach', ascending=False).head(10)
     
+    # Add custom CSS for padding and smaller media
+    st.markdown("""
+    <style>
+        .media {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        .scorecards {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Iterate through the top posts and display them
     for index, row in top_posts.iterrows():
-        # Create two columns
-        col1, col2 = st.columns([2, 1])  # Adjust width as needed
+        # Create three columns for spacing and content
+        spacer1, col1, col2, spacer2 = st.columns([0.5, 2, 1, 0.5])  # Adjust widths as needed
         
         with col1:
             # Display caption
@@ -66,16 +83,18 @@ def main():
             <div class="scorecard">Reach: {row['reach']}</div>
             <div class="scorecard">Saves: {row['saved']}</div>
             """
-            st.markdown(metrics_html, unsafe_allow_html=True)
+            st.markdown(f'<div class="scorecards">{metrics_html}</div>', unsafe_allow_html=True)
         
         with col2:
-            # Display media
+            # Display media in a styled container
+            st.markdown('<div class="media">', unsafe_allow_html=True)
             if row['media_type'] == 'IMAGE':
-                st.image(row['source'], use_column_width=True)
+                st.image(row['source'], use_column_width=False, width=200)
             elif row['media_type'] == 'VIDEO':
-                st.video(row['source'])
+                st.video(row['source'], start_time=0, format="video/mp4")
+            st.markdown('</div>', unsafe_allow_html=True)
     
-        st.markdown("---")
+        st.markdown("---")  # Divider between posts
 
 if __name__ == "__main__":
     main()

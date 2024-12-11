@@ -21,7 +21,7 @@ def fetch_data(query: str) -> pd.DataFrame:
 # Main app
 def main():
     st.title("Social Buddy - Instagram")
-    st.subtitle("Lundy's Ice Cream")
+    st.header("Lundy's Ice Cream")
     
     query = """
     SELECT *

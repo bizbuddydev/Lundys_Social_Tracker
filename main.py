@@ -51,11 +51,10 @@ def main():
         }
         .caption {
             font-size: 16px;
-            font-weight: bold;
             margin-bottom: 5px;
         }
         .details {
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 10px;
             color: #555555;
         }

@@ -20,7 +20,8 @@ def fetch_data(query: str) -> pd.DataFrame:
 
 # Main app
 def main():
-    st.title("Streamlit GCP Data Loader")
+    st.title("Social Buddy - Instagram")
+    st.subtitle("Lundy's Ice Cream")
     
     query = """
     SELECT *

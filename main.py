@@ -20,8 +20,28 @@ def fetch_data(query: str) -> pd.DataFrame:
 
 # Main app
 def main():
-    st.title("Social Buddy - Instagram")
-    st.header("Lundy's Ice Cream")
+    # Add custom CSS for centering text
+    st.markdown("""
+    <style>
+        .centered-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .centered-header {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Centered title
+    st.markdown('<div class="centered-title">Social Buddy - Instagram</div>', unsafe_allow_html=True)
+    
+    # Centered header
+    st.markdown('<div class="centered-header">Lundy\'s Ice Cream</div>', unsafe_allow_html=True)
     
     query = """
     SELECT *

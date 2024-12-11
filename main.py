@@ -98,6 +98,8 @@ def main():
     
     # Define a consistent media width
     MEDIA_WIDTH = 500
+
+    st.markdown("---") 
     
     # Iterate through the top posts and display them
     for index, row in top_posts.iterrows():

@@ -36,7 +36,6 @@ query = """
 SELECT *
 FROM `bizbuddydemo-v1.ig_data.lundys_postdata`
 ORDER BY created_time DESC
-LIMIT 10
 """
 
 # Load/Transform Data

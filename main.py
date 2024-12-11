@@ -21,11 +21,11 @@ def fetch_data(query: str) -> pd.DataFrame:
 # Define filter functions
 def filter_last_30_days(df):
     cutoff = datetime.now() - timedelta(days=30)
-    return df[df["timestamp"] >= cutoff].sort_values(by="timestamp", ascending=False)
+    return df[df["created_time"] >= cutoff].sort_values(by="created_time", ascending=False)
 
 def filter_last_6_months(df):
     cutoff = datetime.now() - timedelta(days=182)  # Approx. 6 months
-    return df[df["timestamp"] >= cutoff].sort_values(by="timestamp", ascending=False)
+    return df[df["created_time"] >= cutoff].sort_values(by="created_time", ascending=False)
 
 def top_10_by_column(df, column):
     return df.sort_values(by=column, ascending=False).head(10)
@@ -103,7 +103,7 @@ def main():
     
     # If no filter is selected, display all data sorted by date
     if "filtered_data" not in locals():
-        filtered_data = data.sort_values(by="timestamp", ascending=False).head(25)
+        filtered_data = data.sort_values(by="created_time", ascending=False).head(25)
     
     st.markdown("""
     <style>
@@ -153,7 +153,7 @@ def main():
         spacer1, col1, col2, spacer2 = st.columns([0.5, 2, 1, 0.5])  # Adjust widths as needed
         
         with col1:
-            # Display timestamp
+            # Display created_time
             st.markdown(f"<div class='details'>Posted On: {row['created_time']}</div>", unsafe_allow_html=True)
     
             # Display caption with title

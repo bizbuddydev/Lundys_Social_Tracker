@@ -49,11 +49,31 @@ def main():
             margin-left: 20px;
             margin-right: 20px;
         }
+        .caption {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .details {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555555;
+        }
+        .scorecard {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px;
+            background-color: #f3f3f3;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
     """, unsafe_allow_html=True)
     
     # Define a consistent media width
-    MEDIA_WIDTH = 500  # Adjust this value as needed
+    MEDIA_WIDTH = 300
     
     # Iterate through the top posts and display them
     for index, row in top_posts.iterrows():
@@ -61,31 +81,22 @@ def main():
         spacer1, col1, col2, spacer2 = st.columns([0.5, 2, 1, 0.5])  # Adjust widths as needed
         
         with col1:
-            # Display caption
-            st.markdown(f"### {row['caption']}")
+            # Display timestamp
+            st.markdown(f"<div class='details'>Posted on: {row['timestamp']}</div>", unsafe_allow_html=True)
+    
+            # Display caption with title
+            st.markdown(f"<div class='caption'>Caption: {row['caption']}</div>", unsafe_allow_html=True)
             
             # Display metrics in scorecards
-            st.markdown("""
-            <style>
-            .scorecard {
-                display: inline-block;
-                padding: 10px 20px;
-                margin: 5px;
-                background-color: #f3f3f3;
-                border-radius: 8px;
-                text-align: center;
-                font-weight: bold;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-            
             metrics_html = f"""
-            <div class="scorecard">Likes: {row['like_count']}</div>
-            <div class="scorecard">Comments: {row['comments_count']}</div>
-            <div class="scorecard">Reach: {row['reach']}</div>
-            <div class="scorecard">Saves: {row['saved']}</div>
+            <div class="scorecards">
+                <div class="scorecard">Likes: {row['like_count']}</div>
+                <div class="scorecard">Comments: {row['comments_count']}</div>
+                <div class="scorecard">Reach: {row['reach']}</div>
+                <div class="scorecard">Saves: {row['saved']}</div>
+            </div>
             """
-            st.markdown(f'<div class="scorecards">{metrics_html}</div>', unsafe_allow_html=True)
+            st.markdown(metrics_html, unsafe_allow_html=True)
         
         with col2:
             # Display media in a styled container

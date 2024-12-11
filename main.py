@@ -94,7 +94,7 @@ def main():
             <div class="scorecards">
                 <div class="scorecard">Reach: {row['reach']}</div>
                 <div class="scorecard">Likes: {row['like_count']}</div>
-                <div class="scorecard">Like Rate: {row['Like Rate']}</div>
+                <div class="scorecard">Like Rate: {row['Like Rate']}%</div>
                 <div class="scorecard">Comments: {row['comments_count']}</div>
                 <div class="scorecard">Saves: {row['saved']}</div>
             </div>

@@ -32,6 +32,7 @@ def main():
     # Fetch the data
     st.write("Fetching data from BigQuery...")
     data = fetch_data(query)
+    data["Like Rate"] = data["Likes"]/data["Engagement"]
 
     # Get top 10 posts
     top_posts = data.sort_values(by='reach', ascending=False).head(10)
@@ -83,7 +84,7 @@ def main():
         
         with col1:
             # Display timestamp
-            st.markdown(f"<div class='details'>Posted on: {row['created_time']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='details'>Posted On: {row['created_time']}</div>", unsafe_allow_html=True)
     
             # Display caption with title
             st.markdown(f"<div class='caption'>Caption: {row['caption']}</div>", unsafe_allow_html=True)
@@ -93,6 +94,7 @@ def main():
             <div class="scorecards">
                 <div class="scorecard">Reach: {row['reach']}</div>
                 <div class="scorecard">Likes: {row['like_count']}</div>
+                <div class="scorecard">Like Rate: {row['Like Rate']}</div>
                 <div class="scorecard">Comments: {row['comments_count']}</div>
                 <div class="scorecard">Saves: {row['saved']}</div>
             </div>

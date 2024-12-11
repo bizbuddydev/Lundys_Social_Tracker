@@ -36,7 +36,6 @@ def main():
     # Get top 10 posts
     top_posts = data.sort_values(by='reach', ascending=False).head(10)
     
-    # Add custom CSS for padding and smaller media
     st.markdown("""
     <style>
         .media {
@@ -52,6 +51,9 @@ def main():
         }
     </style>
     """, unsafe_allow_html=True)
+    
+    # Define a consistent media width
+    MEDIA_WIDTH = 300  # Adjust this value as needed
     
     # Iterate through the top posts and display them
     for index, row in top_posts.iterrows():
@@ -89,7 +91,7 @@ def main():
             # Display media in a styled container
             st.markdown('<div class="media">', unsafe_allow_html=True)
             if row['media_type'] == 'IMAGE':
-                st.image(row['source'], use_container_width=False, width=200)
+                st.image(row['source'], width=MEDIA_WIDTH)
             elif row['media_type'] == 'VIDEO':
                 st.video(row['source'], start_time=0, format="video/mp4")
             st.markdown('</div>', unsafe_allow_html=True)

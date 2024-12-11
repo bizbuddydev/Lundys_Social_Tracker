@@ -3,8 +3,17 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 import pandas as pd
 from datetime import date, timedelta
+import json
 
 st.set_page_config(page_title="Social Overview", layout="wide")
+
+# Load the configuration file
+def load_config(file_path="config.json"):
+    with open(file_path, "r") as f:
+        return json.load(f)
+
+# Load the account configuration
+config = load_config()
 
 # Load credentials and project ID from st.secrets
 credentials = service_account.Credentials.from_service_account_info(
@@ -31,10 +40,15 @@ def filter_last_6_months(df):
 def top_10_by_column(df, column):
     return df.sort_values(by=column, ascending=False).head(10)
 
+# Use the variables in your app
+account_name = config["account_name"]
+datasetid = config["datasetid"]
+tableid = config["tableid"]
+
 ### Get data ###
-query = """
+query = f"""
 SELECT *
-FROM `bizbuddydemo-v1.ig_data.lundys_postdata`
+FROM `bizbuddydemo-v1.{datasetid}.{tableid}`
 ORDER BY created_time DESC
 """
 
@@ -60,6 +74,12 @@ def main():
             font-size: 24px;
             margin-bottom: 20px;
         }
+        .left-header {
+            text-align: left;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
     </style>
     """, unsafe_allow_html=True)
     
@@ -67,7 +87,10 @@ def main():
     st.markdown('<div class="centered-title">Social Buddy - Instagram</div>', unsafe_allow_html=True)
     
     # Centered header
-    st.markdown('<div class="centered-header">Lundy\'s Ice Cream</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="centered-header">{account_name}</div>', unsafe_allow_html=True)
+
+    # Centered header
+    st.markdown(f'<div class="left-header">Filter Posts:</div>', unsafe_allow_html=True)
 
     # Add buttons for filtering options
     st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)

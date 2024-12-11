@@ -2,7 +2,7 @@ import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import pandas as pd
-import datetime
+import datetime, timedelta
 
 st.set_page_config(page_title="Social Overview", layout="wide")
 
@@ -21,16 +21,15 @@ def fetch_data(query: str) -> pd.DataFrame:
 
 # Define filter functions
 def filter_last_30_days(df):
-    cutoff = datetime.now() - timedelta(days=30)
+    cutoff = date.today() - timedelta(days=30)
     return df[df["created_time"] >= cutoff].sort_values(by="created_time", ascending=False)
 
 def filter_last_6_months(df):
-    cutoff = datetime.now() - timedelta(days=182)  # Approx. 6 months
+    cutoff = date.today() - timedelta(days=182)  # Approx. 6 months
     return df[df["created_time"] >= cutoff].sort_values(by="created_time", ascending=False)
 
 def top_10_by_column(df, column):
     return df.sort_values(by=column, ascending=False).head(10)
-
 
 ### Get data ###
 query = """
@@ -40,11 +39,10 @@ ORDER BY created_time DESC
 LIMIT 10
 """
 
-# Fetch the 
+# Load/Transform Data
 data = fetch_data(query)
-
-# Add Like Rate
 data["Like Rate"] = round(data["like_count"]/data["reach"] * 100, 2)
+data["created_time"] = pd.to_datetime(data["created_time"]).dt.date
 
 
 # Main app

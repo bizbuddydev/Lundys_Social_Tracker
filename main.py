@@ -32,7 +32,7 @@ def main():
     # Fetch the data
     st.write("Fetching data from BigQuery...")
     data = fetch_data(query)
-    data["Like Rate"] = data["like_count"]/data["reach"]
+    data["Like Rate"] = round(data["like_count"]/data["reach"] * 100, 2)
 
     # Get top 10 posts
     top_posts = data.sort_values(by='reach', ascending=False).head(10)

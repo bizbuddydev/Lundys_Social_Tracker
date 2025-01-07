@@ -15,10 +15,10 @@ st.set_page_config(page_title="Social Overview", layout="wide", page_icon="📊"
 
 # Define links to other pages
 PAGES = {
-    "📊 Overview": "https://smp-bizbuddy-accountoverview.streamlit.app/",
-    "📱 Posts": "https://smp-bizbuddy-postoverview.streamlit.app",
-    "🗓️ Scheduler": "https://smp-bizbuddy-postscheduler.streamlit.app/",
-    "💡 Brainstorm": "https://smp-bizbuddy-v1-brainstorm.streamlit.app/"
+    "📊 Overview": "https://hv-bizbuddy-socialoverview.streamlit.app/",
+    "📱 Posts": "https://hv-bizbuddy-postoverview.streamlit.app",
+    "🗓️ Scheduler": "https://hv-bizbuddy-postscheduler.streamlit.app/",
+    "💡 Brainstorm": "https://hv-bizbuddy-v1-brainstorm.streamlit.app/"
 }
 
 # Sidebar navigation
@@ -36,6 +36,7 @@ config = load_config()
 
 # Set env variables
 ACCOUNT_NAME = config["ACCOUNT_NAME"]
+PAGE_ID = config["PAGE_ID"]
 PROJECT_ID = config["PROJECT_ID"]
 DATASET_ID = config["DATASET_ID"]
 ACCOUNT_TABLE_ID = config["ACCOUNT_TABLE_ID"]
@@ -60,13 +61,13 @@ openai.api_key = st.secrets["openai"]["api_key"]
 AI_client = openai
 
 # Get Business Description
-def pull_busdescritpion(dataset_id, table_id):
+def pull_busdescritpion(dataset_id, table_id, page_id):
     
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
 
     # Query to fetch all data from the table
-    query = f"SELECT `Description of Business and Instagram Goals` FROM `{table_ref}` LIMIT 1"
+    query = f"SELECT `description` FROM `{table_ref}` WHERE page_id = '{page_id}' LIMIT 1"
     
     try:
         # Execute the query
@@ -79,16 +80,16 @@ def pull_busdescritpion(dataset_id, table_id):
         st.error(f"Error fetching data: {e}")
         return None
 
-bus_description = pull_busdescritpion(ACCOUNT_DATASET_ID, BUSINESS_TABLE_ID)
+bus_description = pull_busdescritpion(ACCOUNT_DATASET_ID, BUSINESS_TABLE_ID, PAGE_ID)
 
 # Get Post Idea Data
-def pull_postideas(dataset_id, table_id):
+def pull_postideas(dataset_id, table_id, page_id):
     
     # Build the table reference
     table_ref = f"{PROJECT_ID}.{dataset_id}.{table_id}"
 
     # Query to fetch all data from the table
-    query = f"SELECT * FROM `{table_ref}` LIMIT 3"
+    query = f"SELECT * FROM `{table_ref}` WHERE page_id = {page_id} ORDER BY date ASC LIMIT 3"
     
     try:
         # Execute the query
@@ -290,7 +291,7 @@ def generate_gpt_summary(static_summary, business_description):
     try:
         # Call ChatGPT using the updated syntax
         response = AI_client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
@@ -347,7 +348,7 @@ def main():
     performance_summary = generate_static_summary(l7_igmetrics, l7_perdiff)
 
     #Get Scheduled Posts
-    post_ideas = pull_postideas(ACCOUNT_DATASET_ID, IDEAS_TABLE_ID)
+    post_ideas = pull_postideas(ACCOUNT_DATASET_ID, IDEAS_TABLE_ID, PAGE_ID)
     
     # Create layout with two columns
     col_left, col_right = st.columns(2)
@@ -476,8 +477,8 @@ def main():
         st.header("Upcoming Scheduled Posts")
         
         for index, row in post_ideas.iterrows():
-            with st.expander(f"{row['Date']}, {row['post_type']}: {row['caption'][:50]}..."):
-                st.markdown(f"**Date:** {row['Date']}")
+            with st.expander(f"{row['date']}, {row['post_type']}: {row['caption'][:50]}..."):
+                st.markdown(f"**Date:** {row['date']}")
                 st.markdown(f"**Caption:** {row['caption']}")
                 st.markdown(f"**Post Type:** {row['post_type']}")
                 st.markdown(f"**Themes:** {row['themes']}")

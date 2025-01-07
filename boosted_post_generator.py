@@ -7,10 +7,10 @@ openai_api_key = st.secrets["openai"]["api_key"]
 
 # Define links to other pages
 PAGES = {
-    "📊 Overview": "https://hv-bizbuddy-socialoverview.streamlit.app/",
-    "📱 Posts": "https://hv-bizbuddy-postoverview.streamlit.app",
-    "🗓️ Scheduler": "https://hv-bizbuddy-postscheduler.streamlit.app/",
-    "💡 Brainstorm": "https://hv-bizbuddy-v1-brainstorm.streamlit.app/"
+    "📊 Overview": "https://lundys-bizbuddy-socialoverview.streamlit.app/",
+    "📱 Posts": "https://lundys-bizbuddy-postoverview.streamlit.app",
+    "🗓️ Scheduler": "https://lundys-bizbuddy-postscheduler.streamlit.app/",
+    "💡 Brainstorm": "https://lundys-bizbuddy-v1-brainstorm.streamlit.app/"
 }
 
 # Sidebar navigation

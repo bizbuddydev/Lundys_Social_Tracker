@@ -10,10 +10,10 @@ st.set_page_config(page_title="Post Scheduler", layout="wide", page_icon = "🗓
 
 # Define links to other pages
 PAGES = {
-    "📊 Overview": "https://smp-bizbuddy-accountoverview.streamlit.app/",
-    "📱 Posts": "https://smp-bizbuddy-postoverview.streamlit.app",
-    "🗓️ Scheduler": "https://smp-bizbuddy-postscheduler.streamlit.app/",
-    "💡 Brainstorm": "https://smp-bizbuddy-v1-brainstorm.streamlit.app/"
+    "📊 Overview": "https://hv-bizbuddy-socialoverview.streamlit.app/",
+    "📱 Posts": "https://hv-bizbuddy-postoverview.streamlit.app",
+    "🗓️ Scheduler": "https://hv-bizbuddy-postscheduler.streamlit.app/",
+    "💡 Brainstorm": "https://hv-bizbuddy-v1-brainstorm.streamlit.app/"
 }
 
 # Sidebar navigation
@@ -31,6 +31,7 @@ config = load_config()
 
 # Set env variables
 ACCOUNT_NAME = config["ACCOUNT_NAME"]
+PAGE_ID = config["PAGE_ID"]
 PROJECT_ID = config["PROJECT_ID"]
 ACCOUNT_DATASET_ID = config["ACCOUNT_DATASET_ID"]
 IDEAS_TABLE_ID = config["IDEAS_TABLE_ID"]
@@ -85,7 +86,7 @@ def generate_post_idea(strategy):
     )
 
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a social media manager with expertise in creating engaging content."},
             {"role": "user", "content": prompt}
@@ -93,12 +94,14 @@ def generate_post_idea(strategy):
     )
 
     idea_json = response.choices[0].message.content.strip()
+    st.write(idea_json)
 
     # Convert the JSON idea to a DataFrame
     idea_df = pd.read_json(idea_json, typ="series").to_frame().T
 
     # Assign a date to the post
     idea_df["Date"] = fetch_latest_date()
+    idea_df["page_id"] = PAGE_ID
 
     return idea_df
 
@@ -182,6 +185,7 @@ def fetch_post_data():
     query = f"""
         SELECT date, caption, post_type, themes, tone, source
         FROM `{PROJECT_ID}.{ACCOUNT_DATASET_ID}.{IDEAS_TABLE_ID}`
+        WHERE page_id = {PAGE_ID}
         ORDER BY date ASC
     """
     query_job = bq_client.query(query)

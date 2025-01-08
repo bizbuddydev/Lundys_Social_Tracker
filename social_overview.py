@@ -385,10 +385,6 @@ def main():
         st.subheader("Last 7 days")
          # Columns for scorecards
         coll5, coll6, coll7, coll8  = st.columns(4) 
-
-        st.write(l7_perdiff)
-        st.write(p7_igmetrics)
-        st.write(l7_igmetrics)
         
         with coll5:
             st.metric(label="Followers Gained", value=f"{l7_igmetrics.iloc[0]["Followers Gained"]:,.0f}")

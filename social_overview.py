@@ -254,6 +254,7 @@ def calculate_percentage_diff_df(current_df, previous_df):
 
         # Add the percentage difference as a column
         percentage_diff_df[column] = percentage_diff
+        percentage_diff_df.fillna(0, inplace = True)
 
     return percentage_diff_df
 

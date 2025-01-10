@@ -44,6 +44,8 @@ POST_TABLE_ID = config["POST_TABLE_ID"]
 ACCOUNT_DATASET_ID = config["ACCOUNT_DATASET_ID"]
 BUSINESS_TABLE_ID = config["BUSINESS_TABLE_ID"]
 IDEAS_TABLE_ID = config["IDEAS_TABLE_ID"]
+SUMMARY_TABLE_ID = config["SUMMARY_TABLE_ID"]
+PAGE_ID = config["PAGE_ID"]
 
 
 # Load credentials and project ID from st.secrets
@@ -110,6 +112,27 @@ def pull_dataframes(table_id):
 
     # Query to fetch all data from the table
     query = f"SELECT * FROM `{table_ref}`"
+    
+    try:
+        # Execute the query
+        query_job = client.query(query)
+        result = query_job.result()
+        # Convert the result to a DataFrame
+        data = result.to_dataframe()
+        return data
+    except Exception as e:
+        st.error(f"Error fetching data: {e}")
+        return None
+
+
+# Function to pull data from BigQuery
+def pull_accountsummary():
+    
+    # Build the table reference
+    table_ref = f"{PROJECT_ID}.{ACCOUNT_DATASET_ID}.{SUMMARY_TABLE_ID}"
+
+    # Query to fetch all data from the table
+    query = f"SELECT * FROM `{table_ref}` WHERE page_id = '{PAGE_ID}' ORDER BY date DESC LIMIT 1"
     
     try:
         # Execute the query
@@ -470,13 +493,14 @@ def main():
     with col_right:
         # Placeholder for other visuals or information
         st.header("AI Analysis of recent performance")
-        response_text = generate_gpt_summary(bus_description, performance_summary)
-        bullet1, bullet2 = split_bullet_points(response_text)
+        account_summary_data = pull_accountsummary()
+        account_summary = account_summary_data.iloc[0][1]
+        #response_text = generate_gpt_summary(bus_description, performance_summary)
+        bullet1, bullet2 = split_bullet_points(account_summary)
         st.write(bullet1)
         st.write(bullet2)
         
         st.header("Upcoming Scheduled Posts")
-        
         for index, row in post_ideas.iterrows():
             with st.expander(f"{row['date']}, {row['post_type']}: {row['caption'][:50]}..."):
                 st.markdown(f"**Date:** {row['date']}")

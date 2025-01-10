@@ -1,11 +1,12 @@
 {
   "ACCOUNT_NAME": "Lundy's Ice Cream",
-  "PAGE_ID" : 17841460991238322,
   "PROJECT_ID" : "bizbuddydemo-v1",
   "DATASET_ID": "ig_data",
   "ACCOUNT_DATASET_ID": "strategy_data",
   "POST_TABLE_ID": "lundys_postdata",
   "ACCOUNT_TABLE_ID": "lundys_igaccountdata",
   "IDEAS_TABLE_ID" : "postideas",
-  "BUSINESS_TABLE_ID" : "businesscontext"
+  "BUSINESS_TABLE_ID" : "businesscontext",
+  "SUMMARY_TABLE_ID" : "summarytable",
+  "PAGE_ID" : "17841460991238322"
 }
